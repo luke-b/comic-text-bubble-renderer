@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Processing.js Test</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/processing.js/1.4.8/processing.min.js"></script>
+<script type="application/processing" data-processing-target="pjs">
+   
+   size(200, 200);
+   background(100);
+   //https://github.com/huertatipografica/gochi-hand/raw/master/fonts/otf/GochiHand.otf
+   PFont f = createFont("Arial Bold",16);
+   textFont(f,16);
+   fill(255);
+
+
+  
+    String[] textiky1 = {
+                "pane Fialo******",
+                "kde mám po-*****",
+                "pelník?*********",
+                "*^**************",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************"
+  };
+  
+      String[] textiky2 = {
+                "****************",
+                "****************",
+                "****************",
+                "********ooh pane",
+                "******prezidente",
+                "*******^**ale...",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************"
+  };
+  
+  
+  
+     String[] textiky3 = {
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "****************",
+                "**********jistě!",
+                "*************^**",
+                "****************",
+                "****************",
+                "****************",
+                "****************"
+  };
+  
+  
+     
+
+   
+   int charWidth = 11; //11
+   int charHeight = 14; //14
+   int topPadding = 17;
+   int leftPadding = 17;
+   int bubbleMargin = 32; //24
+   int bubbleStroke = 4;  //2
+   int pointerYOffset = 0; 
+  
+  
+  renderBubble(textiky1);
+  renderBubble(textiky2);
+  renderBubble(textiky3);
+  
+   
+   
+   
+ void renderBubble(String[] textik) {
+     
+        float[] sizes = new float[16*13];
+   int[] pointers = new int[20];
+   int pointerCount = 0;
+     
+     fill(0);
+   noStroke();
+   for (int i = 0; i < 16; i++) {
+       for (int j = 0; j < 13; j++) {
+           if (textik[j].charAt(i) != "*" && textik[j].charAt(i) != "^") {
+            float r = random(1);
+            sizes[i+j*16] = r;
+            ellipse(i*charWidth+leftPadding,j*charHeight+topPadding, 
+            bubbleMargin+r*5-2, bubbleMargin+r*5-2);
+           }
+           
+           if (textik[j].charAt(i) == "^") {
+               pointers[pointerCount] = i+j*16;
+               pointerCount++;
+           }
+       }
+   }
+   
+   fill(255);
+   noStroke();
+   for (int i = 0; i < 16; i++) {
+       for (int j = 0; j < 13; j++) {
+           if (textik[j].charAt(i) != "*" && textik[j].charAt(i) != "^") {
+            float r = sizes[i+j*16];
+            ellipse(i*charWidth+leftPadding,j*charHeight+topPadding, (bubbleMargin-bubbleStroke)+r*5-2, (bubbleMargin-bubbleStroke)+r*5-2);
+           }
+       }
+   }
+   
+   
+   fill(0);
+   for (int i = 0; i < pointerCount; i++) {
+       
+       int x = pointers[i] % 16;
+       int y = pointers[i] / 17;
+       
+       float x1 = x*charWidth+leftPadding;
+       float y1 = y*charHeight+(topPadding-pointerYOffset)-6;
+       float x2 = x1;
+       float y2 = 9*charHeight+(topPadding-pointerYOffset);
+       
+       triangle(x1-5-2,y1,x1+5+2,y1,x2,y2+4);
+       
+   }
+   
+   fill(255);
+   for (int i = 0; i < pointerCount; i++) {
+       
+       int x = pointers[i] % 16;
+       int y = pointers[i] / 17-1;
+       
+       float x1 = x*charWidth+leftPadding;
+       float y1 = y*charHeight+(topPadding-pointerYOffset);
+       float x2 = x1;
+       float y2 = 9*charHeight+(topPadding-pointerYOffset);
+       
+       triangle(x1-5,y1,x1+5,y1,x2,y2);
+       
+   }
+   
+   fill(0);
+   for (int i = 0; i < 16; i++) {
+       for (int j = 0; j < 13; j++) {
+           if (textik[j].charAt(i) != "*" && textik[j].charAt(i) != "^") {
+               
+               pushMatrix();
+               float angle1 = radians(random(1)-1);
+            //   rotate(angle1);
+               text(textik[j].charAt(i),i*charWidth+leftPadding-textWidth(textik[j].charAt(i))/2,j*charHeight+22);
+               popMatrix();
+           }
+       }
+   }
+     
+ }
+
+   
+   
+</script>
+</head>
+<body>
+<h1>Processing.js Test</h1>
+<p>Demonstrates simple comic text bubble rendering ...</p>
+<canvas id="pjs"></canvas>
+</body>
+</html>
